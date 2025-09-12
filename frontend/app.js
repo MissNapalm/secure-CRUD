@@ -1,5 +1,5 @@
 async function fetchItems() {
-  const res = await fetch('http://localhost:3001/items');
+  const res = await fetch('http://localhost:3002/items');
   const items = await res.json();
   const ul = document.getElementById('items');
   ul.innerHTML = '';
@@ -22,7 +22,7 @@ async function fetchItems() {
 
 async function createItem() {
   const name = document.getElementById('newItem').value;
-  await fetch('http://localhost:3001/items', {
+  await fetch('http://localhost:3002/items', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name })
@@ -33,7 +33,7 @@ async function createItem() {
 async function updateItem(id) {
   const name = prompt('New name:');
   if (name) {
-    await fetch(`http://localhost:3001/items/${id}`, {
+    await fetch(`http://localhost:3002/items/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name })
@@ -43,7 +43,7 @@ async function updateItem(id) {
 }
 
 async function deleteItem(id) {
-  await fetch(`http://localhost:3001/items/${id}`, { method: 'DELETE' });
+  await fetch(`http://localhost:3002/items/${id}`, { method: 'DELETE' });
   fetchItems();
 }
 
