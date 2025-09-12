@@ -17,7 +17,7 @@ button {
   padding: 4px 10px;
   font-size: 0.95em;
   border: 1px solid #bbb;
-  background: #eee;
+  background: hsl(0, 100%, 51%);
   cursor: pointer;
   border-radius: 3px;
   align-items: center;
