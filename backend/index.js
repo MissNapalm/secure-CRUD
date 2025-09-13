@@ -1,11 +1,19 @@
 import express from 'express';
 import pkg from 'pg';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import dotenv from 'dotenv';
+dotenv.config();
 const { Pool } = pkg;
+import { body, validationResult } from 'express-validator';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
+app.disable('x-powered-by');
 
 const pool = new Pool({
   user: 'postgres',
@@ -16,14 +24,20 @@ const pool = new Pool({
 });
 
 // CREATE
-app.post('/items', async (req, res) => {
-  const { name } = req.body;
-  const result = await pool.query(
-    'INSERT INTO items(name) VALUES($1) RETURNING *',
-    [name]
-  );
-  res.json(result.rows[0]);
-});
+app.post('/items',
+  body('name').trim().escape().notEmpty(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+    const { name } = req.body;
+    const result = await pool.query(
+      'INSERT INTO items(name) VALUES($1) RETURNING *',
+      [name]
+    );
+    res.json(result.rows[0]);
+  }
+);
 
 // READ
 app.get('/items', async (req, res) => {
@@ -51,4 +65,9 @@ app.delete('/items/:id', async (req, res) => {
 
 app.listen(3002, () => {
   console.log('Backend running on http://localhost:3002');
+});
+// Error logging middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
