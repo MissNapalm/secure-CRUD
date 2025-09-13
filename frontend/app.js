@@ -3,10 +3,14 @@ async function fetchItems() {
   const items = await res.json();
   const ul = document.getElementById('items');
   // Handle empty state
-  if (items.length === 0) { document.getElementById('emptyState').classList.remove('hidden'); return; }
+  if (items.length === 0) {
+    document.getElementById('emptyState').classList.remove('hidden');
+    ul.innerHTML = '';
+    return;
+  }
   document.getElementById('emptyState').classList.add('hidden');
   ul.innerHTML = '';
-  items.forEach(item => {
+  [...items].reverse().forEach(item => {
     const li = document.createElement('li');
     li.className = 'group bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-lg p-4 flex items-center justify-between transition-all duration-200';
     li.innerHTML = `<span class="text-slate-700 font-medium">${item.name}</span><div class="flex gap-2"></div>`;
