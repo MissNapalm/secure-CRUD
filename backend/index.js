@@ -1,9 +1,9 @@
 import express from 'express';
 import pkg from 'pg';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator';
 
 dotenv.config();
