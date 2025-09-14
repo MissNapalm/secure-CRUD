@@ -4,11 +4,13 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
-dotenv.config();
-const { Pool } = pkg;
 import { body, validationResult } from 'express-validator';
 
+dotenv.config();
+
+const { Pool } = pkg;
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
